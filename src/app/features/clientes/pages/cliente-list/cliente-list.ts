@@ -4,11 +4,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Cliente } from '../../models/cliente.model';
 import { ClienteService } from '../../services/cliente-service';
 import { mensajeError } from '../../../../core/utils/http-error';
+import { Paginador } from '../../../../shared/components/paginador/paginador';
 import { SiPermiso } from '../../../../shared/directives/si-permiso';
 
 @Component({
   selector: 'app-cliente-list',
-  imports: [RouterLink, SiPermiso],
+  imports: [RouterLink, SiPermiso, Paginador],
   templateUrl: './cliente-list.html',
   styleUrl: './cliente-list.css',
 })
@@ -53,9 +54,15 @@ export class ClienteList implements OnInit {
     });
   }
 
-  cambiarTamanio(valor: string): void {
-    this.tamanio.set(Number(valor));
+  cambiarTamanio(valor: number): void {
+    this.tamanio.set(valor);
     this.pagina.set(0);
+    this.cargar();
+  }
+
+  irA(pagina: number): void {
+    if (pagina < 0 || pagina >= this.totalPaginas()) return;
+    this.pagina.set(pagina);
     this.cargar();
   }
 
@@ -64,14 +71,6 @@ export class ClienteList implements OnInit {
     else { this.ordenarPor.set(campo); this.direccion.set('asc'); }
     this.pagina.set(0);
     this.cargar();
-  }
-
-  anterior(): void {
-    if (this.pagina() > 0) { this.pagina.update((actual) => actual - 1); this.cargar(); }
-  }
-
-  siguiente(): void {
-    if (!this.ultima()) { this.pagina.update((actual) => actual + 1); this.cargar(); }
   }
 
   darDeBaja(cliente: Cliente): void {
