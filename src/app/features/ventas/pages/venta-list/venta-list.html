@@ -1,0 +1,80 @@
+<section class="sales-page">
+  <header class="page-heading">
+    <div><p class="eyebrow">OPERACIONES</p><h1>Consulta de ventas</h1></div>
+    <div class="heading-actions no-imprimir">
+      <button class="button" type="button" [disabled]="!resultado()?.contenido?.length" (click)="imprimirConsulta()">🖨 Imprimir consulta</button>
+      <a *appSiPermiso="'VENTAS_REGISTRAR'" class="button button-primary" routerLink="nueva">+ Nueva venta</a>
+    </div>
+  </header>
+
+  <p class="print-summary only-print">Filtros: {{ resumenFiltros() }} · Impreso el {{ ahora() | date:'dd/MM/yyyy HH:mm' }}</p>
+
+  <form class="filters no-imprimir" [formGroup]="filtros" (ngSubmit)="buscar()">
+    <label>Cliente
+      <select class="input" formControlName="clienteId">
+        <option [ngValue]="null">Todos</option>
+        @for (cliente of clientes(); track cliente.id) {
+          <option [ngValue]="cliente.id">{{ cliente.apellidos }}, {{ cliente.nombres }}</option>
+        }
+      </select>
+    </label>
+    <label>Estado
+      <select class="input" formControlName="estado">
+        <option [ngValue]="null">Todos</option>
+        <option value="REGISTRADA">Registrada</option>
+        <option value="ANULADA">Anulada</option>
+      </select>
+    </label>
+    <label>Desde <input class="input" type="date" formControlName="desde"></label>
+    <label>Hasta <input class="input" type="date" formControlName="hasta"></label>
+    <div class="filter-actions">
+      <button class="button" type="button" (click)="limpiar()">Limpiar</button>
+      <button class="button button-primary" type="submit">Buscar</button>
+    </div>
+    <label class="page-size">Filas
+      <select class="input" [value]="tamanio" (change)="cambiarTamanio($any($event.target).value)">
+        <option value="5">5</option><option value="10">10</option><option value="20">20</option>
+      </select>
+    </label>
+  </form>
+
+  @if (error()) { <div class="alert" role="alert">{{ error() }} <button type="button" (click)="buscar()">Reintentar</button></div> }
+
+  <section class="sales-card">
+    @if (cargando()) {
+      <div class="state">Buscando ventas…</div>
+    } @else if (resultado(); as pagina) {
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>N.º</th><th>Fecha</th><th>Cliente</th><th>Ítems</th><th class="amount">Total</th><th>Estado</th><th class="no-imprimir">Acciones</th></tr></thead>
+          <tbody>
+            @for (venta of pagina.contenido; track venta.id) {
+              <tr>
+                <td>{{ venta.id }}</td>
+                <td>{{ venta.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+                <td>{{ venta.clienteNombre }}</td>
+                <td>{{ venta.detalles.length }}</td>
+                <td class="amount">{{ venta.total | currency:'PEN':'S/ ':'1.2-2' }}</td>
+                <td><span class="status" [class.cancelled]="venta.estado === 'ANULADA'">{{ venta.estado }}</span></td>
+                <td class="row-actions no-imprimir">
+                  <a class="detail-link" [routerLink]="[venta.id]">Ver</a>
+                  <a class="detail-link" [routerLink]="[venta.id]" [queryParams]="{ imprimir: 1 }" title="Imprimir comprobante" aria-label="Imprimir comprobante">🖨</a>
+                </td>
+              </tr>
+            } @empty {
+              <tr><td colspan="7" class="empty">No hay ventas con esos filtros.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <footer class="pagination">
+        <span class="only-print">Total registrado en la página (sin anuladas): {{ totalPagina() | currency:'PEN':'S/ ':'1.2-2' }} · </span>
+        <span>Página {{ pagina.pagina + 1 }} de {{ pagina.totalPaginas || 1 }} · {{ pagina.totalElementos }} ventas</span>
+        <div class="no-imprimir">
+          <button class="button" type="button" [disabled]="pagina.pagina === 0" (click)="irA(pagina.pagina - 1)">← Anterior</button>
+          <button class="button" type="button" [disabled]="pagina.ultima" (click)="irA(pagina.pagina + 1)">Siguiente →</button>
+        </div>
+      </footer>
+    }
+  </section>
+</section>

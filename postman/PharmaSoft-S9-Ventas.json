@@ -1,0 +1,87 @@
+{
+  "info": {
+    "_postman_id": "2e942853-a0e5-4ddb-9aaa-000000000009",
+    "name": "PharmaSoft - S9 Ventas",
+    "description": "Peticiones para la actividad autónoma Sesión 9. Completa las variables con IDs válidos del entorno local antes de ejecutar.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080/api/v1" },
+    { "key": "clienteActivoId", "value": "22" },
+    { "key": "clienteInactivoId", "value": "21" },
+    { "key": "productoDisponibleId", "value": "1" },
+    { "key": "productoStockDosId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Reporte por categoría",
+      "item": [
+        {
+          "name": "Histórico sin fechas",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{baseUrl}}/reportes/ventas-por-categoria"
+          }
+        },
+        {
+          "name": "Rango de fechas",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/reportes/ventas-por-categoria?desde={{desde}}&hasta={{hasta}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["reportes", "ventas-por-categoria"],
+              "query": [{ "key": "desde", "value": "{{desde}}" }, { "key": "hasta", "value": "{{hasta}}" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Validaciones de venta",
+      "item": [
+        {
+          "name": "V-05 · Mismo producto en dos detalles",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": {{clienteActivoId}},\n  \"detalles\": [\n    { \"productoId\": {{productoDisponibleId}}, \"cantidad\": 1 },\n    { \"productoId\": {{productoDisponibleId}}, \"cantidad\": 1 }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/ventas"
+          }
+        },
+        {
+          "name": "V-06 · Cantidad decimal",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": {{clienteActivoId}},\n  \"detalles\": [{ \"productoId\": {{productoDisponibleId}}, \"cantidad\": 2.5 }]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/ventas"
+          }
+        },
+        {
+          "name": "M-02 · Cliente inactivo",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": {{clienteInactivoId}},\n  \"detalles\": [{ \"productoId\": {{productoDisponibleId}}, \"cantidad\": 1 }]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/ventas"
+          }
+        }
+      ]
+    }
+  ]
+}

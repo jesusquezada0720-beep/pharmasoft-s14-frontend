@@ -1,0 +1,26 @@
+.page-heading { display:flex; align-items:center; justify-content:space-between; gap:18px; margin-bottom:25px; }
+.eyebrow { margin:0 0 9px; color:#0f2e5c; font-size:10px; font-weight:750; letter-spacing:.15em; }
+h1 { margin:0; color:#0f2e5c; font-size:clamp(29px,4vw,38px); letter-spacing:-.05em; }
+.subheading { margin:7px 0 0; color:#6b7280; font-size:13px; }
+.button { display:inline-flex; align-items:center; gap:8px; padding:11px 15px; border:1px solid #cbd5e1; border-radius:10px; color:#1f2937; background:#fff; text-decoration:none; font-size:12px; font-weight:650; white-space:nowrap; }
+.button-primary { border-color:#0f2e5c; background:#0f2e5c; color:#fff; }
+.panel { overflow:hidden; border:1px solid #e3e8f0; border-radius:16px; background:#fff; }
+.toolbar { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:17px 20px; border-bottom:1px solid #e3e8f0; }
+.search { display:flex; align-items:center; gap:8px; width:min(350px,100%); color:#6b7280; }
+.search .input { width:100%; padding:9px 11px; border:1px solid #cbd5e1; border-radius:9px; background:#f4f6fa; color:#1f2937; font-size:12px; }
+.count { color:#6b7280; font-size:11px; white-space:nowrap; }
+.table-wrap { overflow:auto; }
+table { width:100%; border-collapse:collapse; text-align:left; font-size:12px; }
+th { padding:12px 20px; background:#0f2e5c; color:#ffffff; font-size:9px; font-weight:750; letter-spacing:.1em; text-transform:uppercase; }
+td { padding:15px 20px; border-top:1px solid #e3e8f0; color:#6b7280; }
+.primary-cell { color:#1f2937; font-weight:650; }
+.actions-col { text-align:right; white-space:nowrap; }
+.text-action { margin-left:12px; padding:0; border:0; background:none; color:#0f2e5c; text-decoration:none; cursor:pointer; font-size:11px; font-weight:650; }
+.text-action.danger { color:#b42318; }
+.badge { padding:4px 9px; border-radius:99px; background:#dcfce7; color:#166534; font-size:10px; }
+.badge.inactive { background:#f1f5f9; color:#64748b; }
+.state { display:grid; min-height:180px; place-content:center; justify-items:center; gap:8px; color:#6b7280; font-size:12px; }
+.state strong { color:#1f2937; }
+.alert { display:flex; justify-content:space-between; gap:10px; margin:0 0 16px; padding:12px 14px; border:1px solid #fecaca; border-radius:10px; background:#fef3f2; color:#b42318; font-size:12px; }
+.alert button { border:0; background:none; color:inherit; text-decoration:underline; cursor:pointer; }
+@media(max-width:600px) { .page-heading { align-items:flex-start; flex-direction:column; } .toolbar { align-items:flex-start; flex-direction:column; } th,td { padding:12px; } }

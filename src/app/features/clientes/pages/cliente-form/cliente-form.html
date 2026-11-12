@@ -1,0 +1,17 @@
+<section class="form-page">
+  <a class="back-link" routerLink="/clientes">← Volver a clientes</a>
+  <div class="form-heading"><p class="eyebrow">RELACIONES</p><h1>{{ id() ? 'Editar cliente' : 'Nuevo cliente' }}</h1><p>Los campos con asterisco son obligatorios.</p></div>
+  @if (error()) { <div class="alert" role="alert"><span>{{ error() }}</span></div> }
+  <form class="form-card" [formGroup]="form" (ngSubmit)="guardar()">
+    <div class="form-grid">
+      <label>DNI <span class="required">*</span><input class="input" formControlName="dni" inputmode="numeric" maxlength="8" placeholder="8 dígitos"><small class="field-error">{{ mensajeCampo('dni') }}</small></label>
+      <label>Correo electrónico <span class="required">*</span><input class="input" type="email" formControlName="email" maxlength="150" placeholder="nombre@correo.com"><small class="field-error">{{ mensajeCampo('email') }}</small></label>
+      <label>Nombres <span class="required">*</span><input class="input" formControlName="nombres" maxlength="100" placeholder="Nombres"><small class="field-error">{{ mensajeCampo('nombres') }}</small></label>
+      <label>Apellidos <span class="required">*</span><input class="input" formControlName="apellidos" maxlength="100" placeholder="Apellidos"><small class="field-error">{{ mensajeCampo('apellidos') }}</small></label>
+      <label>Teléfono <span class="optional">Opcional · 9 dígitos</span><input class="input" formControlName="telefono" inputmode="numeric" maxlength="9" placeholder="987654321"><small class="field-error">{{ mensajeCampo('telefono') }}</small></label>
+      <label>Dirección <span class="optional">Opcional</span><input class="input" formControlName="direccion" maxlength="250" placeholder="Dirección del cliente"><small class="field-error">{{ mensajeCampo('direccion') }}</small></label>
+    </div>
+    <label class="check-row"><input type="checkbox" formControlName="estado"> Cliente activo</label>
+    <div class="form-actions"><a class="button" routerLink="/clientes">Cancelar</a><button class="button button-primary" type="submit" [disabled]="cargando()">{{ cargando() ? 'Guardando…' : 'Guardar cliente' }}</button></div>
+  </form>
+</section>

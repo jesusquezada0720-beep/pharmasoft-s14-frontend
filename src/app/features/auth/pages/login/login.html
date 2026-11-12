@@ -1,0 +1,34 @@
+<main class="login-page">
+  <section class="login-card" aria-labelledby="login-title">
+    <a class="brand" href="/inicio" aria-label="PharmaSoft">Pharma<span>Soft</span></a>
+    <p class="eyebrow">ACCESO SEGURO</p>
+    <h1 id="login-title">Iniciar sesión</h1>
+    <p class="intro">Ingresa con tu cuenta de PharmaSoft.</p>
+
+    @if (expirada() === '1') {
+      <div class="notice" role="status">Su sesión expiró. Inicia sesión para continuar.</div>
+    }
+    @if (error()) {
+      <div class="error" role="alert">{{ error() }}</div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="ingresar()" novalidate>
+      <label for="username">Usuario</label>
+      <input id="username" class="input" formControlName="username" autocomplete="username" autofocus>
+      @if (form.controls.username.touched && form.controls.username.invalid) {
+        <small class="field-error">Ingresa tu usuario.</small>
+      }
+
+      <label for="password">Contraseña</label>
+      <div class="password-wrap">
+        <input id="password" class="input" [type]="verClave() ? 'text' : 'password'" formControlName="password" autocomplete="current-password">
+        <button class="show-password" type="button" (click)="verClave.update(v => !v)" [attr.aria-label]="verClave() ? 'Ocultar contraseña' : 'Mostrar contraseña'">{{ verClave() ? 'Ocultar' : 'Mostrar' }}</button>
+      </div>
+      @if (form.controls.password.touched && form.controls.password.invalid) {
+        <small class="field-error">Ingresa tu contraseña.</small>
+      }
+
+      <button class="submit" type="submit" [disabled]="enviando()">{{ enviando() ? 'Ingresando…' : 'Ingresar' }}</button>
+    </form>
+  </section>
+</main>

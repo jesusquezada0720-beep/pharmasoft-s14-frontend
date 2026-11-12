@@ -1,0 +1,59 @@
+<section class="form-page">
+  <a class="back-link" routerLink="/productos">← Volver a productos</a>
+  <div class="form-heading">
+    <p class="eyebrow">CATÁLOGO</p>
+    <h1>{{ esEdicion() ? 'Editar producto' : 'Nuevo producto' }}</h1>
+    <p>Completa los datos y selecciona una categoría activa.</p>
+  </div>
+
+  @if (error()) { <div class="alert" role="alert">{{ error() }}</div> }
+
+  @if (cargando()) {
+    <div class="form-card state">Cargando datos…</div>
+  } @else if (!hayCategoriasActivas()) {
+    <div class="form-card notice">
+      <span>No hay categorías activas. Registra o activa una categoría antes de guardar productos.</span>
+      <a class="button button-primary" routerLink="/categorias/nuevo">Nueva categoría</a>
+    </div>
+  } @else {
+    <form class="form-card" [formGroup]="form" (ngSubmit)="guardar()">
+      <label>Categoría <span class="required">*</span>
+        <select class="input" formControlName="categoriaId" (change)="limpiarErrorApi('categoriaId')">
+          <option [ngValue]="null" disabled>Selecciona una categoría…</option>
+          @for (categoria of opciones(); track categoria.id) {
+            <option [ngValue]="categoria.id">{{ categoria.nombre }}{{ categoria.estado ? '' : ' (inactiva)' }}</option>
+          }
+        </select>
+        <small class="field-error">{{ mensajeCampo('categoriaId') }}</small>
+      </label>
+      @if (categoriaInactiva()) {
+        <small class="field-error">La categoría elegida está inactiva. Selecciona una categoría activa.</small>
+      }
+
+      <label>Nombre <span class="required">*</span>
+        <input class="input" formControlName="nombre" (input)="limpiarErrorApi('nombre')" maxlength="150" placeholder="Ej. Amoxicilina 500 mg">
+        <small class="field-error">{{ mensajeCampo('nombre') }}</small>
+      </label>
+
+      <div class="field-row">
+        <label>Precio (S/) <span class="required">*</span>
+          <input class="input" type="number" step="0.01" min="0.01" formControlName="precio" (input)="limpiarErrorApi('precio')" placeholder="0.00">
+          <small class="field-error">{{ mensajeCampo('precio') }}</small>
+        </label>
+        <label>Stock <span class="required">*</span>
+          <input class="input" type="number" step="1" min="0" formControlName="stock" (input)="limpiarErrorApi('stock')" placeholder="0">
+          <small class="field-error">{{ mensajeCampo('stock') }}</small>
+        </label>
+      </div>
+
+      <label class="check-row"><input type="checkbox" formControlName="estado"> Producto activo</label>
+
+      <div class="form-actions">
+        <a class="button" routerLink="/productos">Cancelar</a>
+        <button class="button button-primary" type="submit" [disabled]="guardando() || categoriaInactiva()">
+          {{ guardando() ? 'Guardando…' : (esEdicion() ? 'Actualizar producto' : 'Registrar producto') }}
+        </button>
+      </div>
+    </form>
+  }
+</section>

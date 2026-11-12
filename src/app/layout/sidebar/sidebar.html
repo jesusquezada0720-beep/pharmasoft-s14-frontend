@@ -1,0 +1,13 @@
+<aside class="sidebar">
+  <p class="eyebrow">Espacio de trabajo</p>
+  <p class="section-label">MÓDULOS</p>
+  <nav aria-label="Módulos">
+    @for (item of menu(); track item.ruta) {
+      <a [routerLink]="item.ruta" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <span class="nav-icon" aria-hidden="true">{{ item.icono }}</span><span>{{ item.etiqueta }}</span>
+        @if (item.ruta === '/inicio') { <span class="nav-arrow">›</span> }
+      </a>
+    }
+  </nav>
+  <div class="sidebar-foot"><span class="foot-mark">P</span><span><strong>PharmaSoft</strong><small>Gestión de botica</small></span></div>
+</aside>

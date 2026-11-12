@@ -1,0 +1,15 @@
+<header class="header">
+  <button type="button" class="menu-toggle" aria-label="Mostrar u ocultar menú" (click)="toggleMenu.emit()">☰</button>
+  <a routerLink="/inicio" class="brand"><span class="brand-mark">P</span><span>Pharma<span class="brand-light">Soft</span></span></a>
+  <nav class="top-nav" aria-label="Navegación principal">
+    <a routerLink="/inicio">Inicio</a>
+    <a href="http://localhost:8080/swagger-ui.html" target="_blank" rel="noopener">API <span aria-hidden="true">↗</span></a>
+  </nav>
+  @if (auth.sesion(); as sesion) {
+    <div class="user-chip">
+      <span class="status-dot"></span>
+      <span class="user-details"><strong>{{ sesion.nombreCompleto }}</strong><small>{{ sesion.roles.join(' · ') }} · expira {{ sesion.expiraEn | date:'HH:mm' }}</small></span>
+    </div>
+    <button type="button" class="logout" (click)="salir()">Cerrar sesión</button>
+  }
+</header>

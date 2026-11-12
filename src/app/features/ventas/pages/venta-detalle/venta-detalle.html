@@ -1,0 +1,88 @@
+<section class="detail-page">
+  @if (nueva() === '1') {
+    <div class="success no-imprimir">Venta registrada correctamente.</div>
+  }
+
+  @if (error()) {
+    <div class="alert no-imprimir" role="alert">
+      <span>{{ error() }}</span>
+      @if (!cargando() && !venta()) {
+        <button class="button" type="button" (click)="cargar()">Reintentar</button>
+      }
+    </div>
+  }
+
+  @if (cargando()) {
+    <div class="receipt state no-imprimir">Cargando venta…</div>
+  } @else if (venta(); as ventaActual) {
+    <article class="receipt" [class.cancelled-receipt]="ventaActual.estado === 'ANULADA'">
+      <header class="receipt-header">
+        <div class="business">
+          <strong class="brand">PharmaSoft</strong>
+          <span>Botica · Sistema de ventas</span>
+        </div>
+        <div class="invoice-number">
+          <span>Comprobante de venta</span>
+          <strong>N.º {{ numero() }}</strong>
+        </div>
+      </header>
+
+      <dl class="sale-data">
+        <div><dt>Fecha</dt><dd>{{ ventaActual.fecha | date:'dd/MM/yyyy HH:mm' }}</dd></div>
+        <div><dt>Cliente</dt><dd>{{ ventaActual.clienteNombre }}</dd></div>
+        @if (cliente(); as clienteActual) {
+          <div><dt>DNI</dt><dd>{{ clienteActual.dni }}</dd></div>
+        }
+        <div>
+          <dt>Estado</dt>
+          <dd><span class="status" [class.cancelled]="ventaActual.estado === 'ANULADA'">{{ ventaActual.estado }}</span></dd>
+        </div>
+      </dl>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Producto</th><th class="amount">Precio</th><th class="amount">Cant.</th><th class="amount">Subtotal</th></tr>
+          </thead>
+          <tbody>
+            @for (detalle of ventaActual.detalles; track detalle.productoId) {
+              <tr>
+                <td>{{ detalle.productoNombre }}</td>
+                <td class="amount">{{ detalle.precio | currency:'PEN':'S/ ':'1.2-2' }}</td>
+                <td class="amount">{{ detalle.cantidad }}</td>
+                <td class="amount">{{ detalle.subtotal | currency:'PEN':'S/ ':'1.2-2' }}</td>
+              </tr>
+            }
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="2">{{ ventaActual.detalles.length }} {{ ventaActual.detalles.length === 1 ? 'producto' : 'productos' }} · {{ unidades() }} {{ unidades() === 1 ? 'unidad' : 'unidades' }}</td>
+              <td class="amount"><strong>Total</strong></td>
+              <td class="amount total">{{ ventaActual.total | currency:'PEN':'S/ ':'1.2-2' }}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      @if (ventaActual.estado === 'ANULADA') {
+        <p class="cancelled-stamp" aria-hidden="true">ANULADA</p>
+      }
+
+      <footer class="print-footer only-print">
+        <p>Gracias por su compra.</p>
+        <p>Documento interno sin valor tributario · Impreso el {{ fechaImpresion() | date:'dd/MM/yyyy HH:mm' }}</p>
+      </footer>
+
+      <footer class="receipt-actions no-imprimir">
+        <a routerLink="/ventas" class="button">Volver a la consulta</a>
+        <a routerLink="/ventas/nueva" class="button">Nueva venta</a>
+        <button class="button button-primary" type="button" (click)="imprimirComprobante()">🖨 Imprimir comprobante</button>
+        @if (ventaActual.estado === 'REGISTRADA') {
+          <button class="button button-danger" type="button" (click)="anular()" [disabled]="anulando()">
+            {{ anulando() ? 'Anulando…' : 'Anular venta' }}
+          </button>
+        }
+      </footer>
+    </article>
+  }
+</section>

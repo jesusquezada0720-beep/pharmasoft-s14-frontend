@@ -1,0 +1,11 @@
+<section class="form-page">
+  <a class="back-link" routerLink="/categorias">← Volver a categorías</a>
+  <div class="form-heading"><p class="eyebrow">CATÁLOGO</p><h1>{{ id() ? 'Editar categoría' : 'Nueva categoría' }}</h1><p>Completa los datos para mantener organizado tu catálogo.</p></div>
+  @if (error()) { <div class="alert" role="alert">{{ error() }}</div> }
+  <form class="form-card" [formGroup]="form" (ngSubmit)="guardar()">
+    <label>Nombre <span class="required">*</span><input class="input" formControlName="nombre" (input)="limpiarErrorApi('nombre')" maxlength="50" placeholder="Ej. Analgésicos"><small class="field-error">{{ form.controls.nombre.touched && form.controls.nombre.invalid ? 'El nombre debe tener entre 3 y 50 caracteres.' : erroresApi()['nombre'] || '' }}</small></label>
+    <label>Descripción <span class="optional">Opcional y acepta hasta 200 caracteres</span><textarea class="input" formControlName="descripcion" (input)="limpiarErrorApi('descripcion')" rows="4" maxlength="200" placeholder="Describe esta categoría"></textarea><small class="field-error">{{ erroresApi()['descripcion'] || '' }}</small></label>
+    <label class="check-row"><input type="checkbox" formControlName="estado"> Categoría activa</label>
+    <div class="form-actions"><a class="button" routerLink="/categorias">Cancelar</a><button class="button button-primary" type="submit" [disabled]="cargando()">{{ cargando() ? 'Guardando…' : 'Guardar categoría' }}</button></div>
+  </form>
+</section>

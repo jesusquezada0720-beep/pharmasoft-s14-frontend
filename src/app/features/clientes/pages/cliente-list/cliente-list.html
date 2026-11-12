@@ -1,0 +1,26 @@
+<section class="page-heading">
+  <div><p class="eyebrow">RELACIONES</p><h1>Clientes</h1><p class="subheading">Consulta y mantén actualizada la información de tus clientes.</p></div>
+  <a *appSiPermiso="'CLIENTES_ESCRIBIR'" class="button button-primary" routerLink="nuevo"><span>＋</span> Nuevo cliente</a>
+</section>
+@if (error()) { <div class="alert" role="alert"><span>{{ error() }}</span><button type="button" (click)="cargar()">Reintentar</button></div> }
+<section class="panel">
+  <div class="toolbar">
+    <label class="search"><span aria-hidden="true">⌕</span><input class="input" type="search" placeholder="Buscar por DNI o nombre..." [value]="filtro()" (input)="filtro.set($any($event.target).value)"></label>
+    <label class="page-size">Filas <select class="select" [value]="tamanio()" (change)="cambiarTamanio($any($event.target).value)"><option value="5">5</option><option value="10">10</option><option value="20">20</option></select></label>
+  </div>
+  @if (cargando()) { <div class="state">Cargando clientes…</div> }
+  @else if (filtrados().length === 0) { <div class="state"><strong>{{ filtro() ? 'No hay coincidencias en esta página' : 'Todavía no hay clientes' }}</strong><span>{{ filtro() ? 'Prueba con otro DNI o nombre.' : 'Registra un cliente para comenzar.' }}</span></div> }
+  @else {
+    <div class="table-wrap"><table><thead><tr>
+      <th><button type="button" class="sort" (click)="ordenar('dni')">DNI <span>{{ ordenarPor() === 'dni' ? (direccion() === 'asc' ? '↑' : '↓') : '↕' }}</span></button></th>
+      <th><button type="button" class="sort" (click)="ordenar('apellidos')">Apellidos y nombres <span>{{ ordenarPor() === 'apellidos' ? (direccion() === 'asc' ? '↑' : '↓') : '↕' }}</span></button></th>
+      <th>Correo</th><th>Teléfono</th><th>Estado</th><th *appSiPermiso="'CLIENTES_ESCRIBIR'" class="actions-col">Acciones</th>
+    </tr></thead><tbody>
+      @for (cliente of filtrados(); track cliente.id) {
+        <tr><td class="mono">{{ cliente.dni }}</td><td class="primary-cell">{{ cliente.apellidos }}, {{ cliente.nombres }}</td><td>{{ cliente.email }}</td><td>{{ cliente.telefono || '—' }}</td><td><span class="badge" [class.inactive]="!cliente.estado">{{ cliente.estado ? 'Activo' : 'Inactivo' }}</span></td><td *appSiPermiso="'CLIENTES_ESCRIBIR'" class="actions-col"><a class="text-action" [routerLink]="[cliente.id, 'editar']">Editar</a><button class="text-action danger" type="button" (click)="darDeBaja(cliente)">Dar de baja</button></td></tr>
+      }
+    </tbody></table></div>
+  }
+  <footer class="pagination"><span>Página {{ pagina() + 1 }} de {{ totalPaginas() }} · {{ totalElementos() }} clientes</span><div><button type="button" class="page-button" [disabled]="pagina() === 0 || cargando()" (click)="anterior()">← Anterior</button><button type="button" class="page-button" [disabled]="ultima() || cargando()" (click)="siguiente()">Siguiente →</button></div></footer>
+</section>
+<p class="page-note">La búsqueda filtra los resultados de la página actual.</p>

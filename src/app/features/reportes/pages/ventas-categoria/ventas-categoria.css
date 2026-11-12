@@ -1,0 +1,25 @@
+.report-page { width: 100%; }
+.page-heading { margin-bottom: 20px; }
+.eyebrow { margin: 0 0 8px; color: #0f2e5c; font-size: 10px; font-weight: 750; letter-spacing: .15em; }
+h1 { margin: 0; color: #0f2e5c; font-size: clamp(28px, 4vw, 36px); letter-spacing: -.05em; }
+.subtitle { margin: 8px 0 0; color: #64748b; font-size: 13px; }
+.filters { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; margin-bottom: 16px; padding: 16px; border: 1px solid #e3e8f0; border-radius: 14px; background: #fff; }
+.filters label { display: flex; flex-direction: column; gap: 5px; min-width: 180px; color: #52627a; font-size: 11px; }
+.input { width: 100%; min-width: 0; padding: 9px 10px; border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc; color: #1f2937; font-size: 12px; }
+.button { display: inline-flex; justify-content: center; align-items: center; padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 9px; background: #fff; color: #1f2937; cursor: pointer; font-size: 11px; font-weight: 650; white-space: nowrap; }
+.button-primary { border-color: #0f2e5c; background: #0f2e5c; color: #fff; }
+.button:disabled { opacity: .55; cursor: not-allowed; }
+.report-card { overflow: hidden; border: 1px solid #e3e8f0; border-radius: 16px; background: #fff; box-shadow: 0 1px 3px rgb(0 0 0 / 5%); }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+thead { background: #0f2e5c; color: #fff; }
+th { padding: 13px 15px; text-align: left; font-size: 10px; font-weight: 750; }
+td { padding: 14px 15px; border-bottom: 1px solid #e3e8f0; color: #52627a; font-size: 12px; }
+.numeric { text-align: right; white-space: nowrap; }
+.bar-track { height: 10px; overflow: hidden; border-radius: 999px; background: #eaf0f8; }
+.bar { display: block; height: 100%; min-width: 0; border-radius: inherit; background: #f5ad00; transition: width .25s ease; }
+tfoot { background: #f8fafc; }
+tfoot th { color: #0f2e5c; font-size: 12px; }
+.state { padding: 44px 20px; text-align: center; color: #64748b; font-size: 13px; }
+.alert { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; padding: 12px 14px; border: 1px solid #fecaca; border-radius: 10px; background: #fef3f2; color: #b42318; font-size: 12px; }
+@media (max-width: 620px) { .filters { align-items: stretch; flex-direction: column; } .filters label { min-width: 0; } .filters .button { align-self: flex-start; } }

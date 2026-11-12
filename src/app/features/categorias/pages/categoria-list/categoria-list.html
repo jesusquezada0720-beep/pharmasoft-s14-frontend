@@ -1,0 +1,16 @@
+<section class="page-heading">
+  <div><p class="eyebrow">CATÁLOGO</p><h1>Categorías</h1><p class="subheading">Organiza los productos de tu botica.</p></div>
+  <a *appSiPermiso="'CATALOGO_ESCRIBIR'" class="button button-primary" routerLink="nuevo"><span>＋</span> Nueva categoría</a>
+</section>
+@if (error()) { <div class="alert" role="alert"><span>{{ error() }}</span><button type="button" (click)="cargar()">Reintentar</button></div> }
+<section class="panel">
+  <div class="toolbar"><label class="search"><span aria-hidden="true">⌕</span><input class="input" type="search" placeholder="Buscar categoría..." [value]="filtro()" (input)="filtro.set($any($event.target).value)"></label><span class="count">{{ filtradas().length }} categorías</span></div>
+  @if (cargando()) { <div class="state">Cargando categorías…</div> }
+  @else if (filtradas().length === 0) { <div class="state"><strong>{{ filtro() ? 'No hay coincidencias' : 'Todavía no hay categorías' }}</strong><span>{{ filtro() ? 'Prueba con otro término de búsqueda.' : 'Crea una categoría para organizar el catálogo.' }}</span></div> }
+  @else {
+    <div class="table-wrap"><table><thead><tr><th>Nombre</th><th>Descripción</th><th>Estado</th><th *appSiPermiso="'CATALOGO_ESCRIBIR'" class="actions-col">Acciones</th></tr></thead><tbody>
+      @for (item of filtradas(); track item.id) { <tr><td class="primary-cell">{{ item.nombre }}</td><td>{{ item.descripcion || '—' }}</td><td><span class="badge" [class.inactive]="!item.estado">{{ item.estado ? 'Activa' : 'Inactiva' }}</span></td><td *appSiPermiso="'CATALOGO_ESCRIBIR'" class="actions-col"><a class="text-action" [routerLink]="[item.id, 'editar']">Editar</a><button class="text-action danger" type="button" (click)="eliminar(item)">Eliminar</button></td></tr> }
+    </tbody></table></div>
+  }
+</section>
+

@@ -1,0 +1,23 @@
+.form-page { max-width:760px; margin:0 auto; }
+.back-link { display:inline-block; margin:0 0 23px; color:#0f2e5c; text-decoration:none; font-size:12px; font-weight:650; }
+.form-heading { margin-bottom:19px; }
+.eyebrow { margin:0 0 8px; color:#0f2e5c; font-size:10px; font-weight:750; letter-spacing:.15em; }
+h1 { margin:0; color:#0f2e5c; font-size:clamp(28px,4vw,36px); letter-spacing:-.05em; }
+.form-heading p:last-child { margin:7px 0 0; color:#6b7280; font-size:13px; }
+.form-card { display:flex; flex-direction:column; gap:16px; padding:24px; border:1px solid #e3e8f0; border-radius:16px; background:#fff; box-shadow:0 1px 3px rgb(0 0 0 / 5%); }
+label { display:flex; flex-direction:column; gap:7px; color:#1f2937; font-size:12px; font-weight:650; }
+.required { color:#b42318; }
+.input { width:100%; padding:10px 11px; border:1px solid #cbd5e1; border-radius:9px; background:#fff; color:#1f2937; font-size:12px; }
+.input:focus { border-color:#0f2e5c; }
+.field-row { display:grid; grid-template-columns:1fr 1fr; gap:15px; }
+.field-error { min-height:14px; color:#b42318; font-size:10px; font-weight:450; }
+.check-row { flex-direction:row; align-items:center; gap:8px; }
+.check-row input { accent-color:#0f2e5c; }
+.form-actions { display:flex; justify-content:flex-end; gap:8px; margin-top:5px; }
+.button { display:inline-flex; justify-content:center; align-items:center; padding:10px 14px; border:1px solid #cbd5e1; border-radius:9px; background:#fff; color:#1f2937; text-decoration:none; cursor:pointer; font-size:11px; font-weight:650; }
+.button-primary { border-color:#0f2e5c; background:#0f2e5c; color:#fff; }
+.button:disabled { opacity:.6; cursor:not-allowed; }
+.alert { margin-bottom:15px; padding:12px 14px; border:1px solid #fecaca; border-radius:10px; background:#fef3f2; color:#b42318; font-size:12px; }
+.notice { align-items:flex-start; color:#725b13; background:#fff6dc; border-color:#f4df9d; font-size:12px; }
+.state { min-height:120px; justify-content:center; color:#6b7280; font-size:12px; }
+@media(max-width:560px) { .form-card { padding:18px; } .field-row { grid-template-columns:1fr; gap:16px; } .form-actions { flex-direction:column-reverse; } .form-actions .button { width:100%; } }

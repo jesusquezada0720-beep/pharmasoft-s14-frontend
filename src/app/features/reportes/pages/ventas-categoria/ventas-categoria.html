@@ -1,0 +1,42 @@
+<section class="report-page">
+  <header class="page-heading">
+    <div><p class="eyebrow">ANÁLISIS</p><h1>Ventas por categoría</h1><p class="subtitle">Compara unidades e ingresos por categoría en el periodo seleccionado.</p></div>
+  </header>
+
+  <form class="filters" [formGroup]="filtros" (ngSubmit)="generar()">
+    <label>Desde <input class="input" type="date" formControlName="desde"></label>
+    <label>Hasta <input class="input" type="date" formControlName="hasta"></label>
+    <button class="button button-primary" type="submit" [disabled]="cargando()">{{ cargando() ? 'Generando…' : 'Generar' }}</button>
+  </form>
+
+  @if (error()) {
+    <div class="alert" role="alert"><span>{{ error() }}</span><button class="button" type="button" (click)="generar()" [disabled]="rangoInvalido() || cargando()">Reintentar</button></div>
+  }
+
+  <section class="report-card" aria-live="polite">
+    @if (cargando()) {
+      <div class="state">Cargando el reporte…</div>
+    } @else if (resultado(); as filas) {
+      @if (filas.length) {
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Categoría</th><th class="numeric">Unidades vendidas</th><th class="numeric">Monto total</th><th>Comparación de monto</th></tr></thead>
+            <tbody>
+              @for (fila of filas; track fila.categoriaId) {
+                <tr>
+                  <td>{{ fila.categoriaNombre }}</td>
+                  <td class="numeric">{{ fila.cantidadVendida }}</td>
+                  <td class="numeric">{{ fila.montoTotal | currency:'PEN':'S/ ':'1.2-2' }}</td>
+                  <td><div class="bar-track" role="img" [attr.aria-label]="(porcentajeMonto(fila) | number:'1.0-0') + '% del mayor monto'"><span class="bar" [style.width.%]="porcentajeMonto(fila)"></span></div></td>
+                </tr>
+              }
+            </tbody>
+            <tfoot><tr><th>Total</th><th class="numeric">{{ totalUnidades() }}</th><th class="numeric">{{ totalMonto() | currency:'PEN':'S/ ':'1.2-2' }}</th><th></th></tr></tfoot>
+          </table>
+        </div>
+      } @else {
+        <div class="state">No hay ventas en el periodo seleccionado.</div>
+      }
+    }
+  </section>
+</section>
