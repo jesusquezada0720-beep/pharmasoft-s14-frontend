@@ -8,7 +8,7 @@
 </section>
 
 @if (error()) {
-  <div class="alert" role="alert"><span>{{ error() }}</span><button type="button" (click)="cargar()">Reintentar</button></div>
+  <div class="alert" role="alert"><span>{{ error() }}</span><button type="button" (click)="reintentar()">Reintentar</button></div>
 }
 
 <section class="panel">
@@ -19,11 +19,6 @@
         @for (categoria of categorias(); track categoria.id) {
           <option [value]="categoria.id">{{ categoria.nombre }}{{ categoria.estado ? '' : ' (inactiva)' }}</option>
         }
-      </select>
-    </label>
-    <label class="page-size">Filas
-      <select class="select" [value]="tamanio()" (change)="cambiarTamanio($any($event.target).value)">
-        <option value="5">5</option><option value="10">10</option><option value="20">20</option>
       </select>
     </label>
   </div>
@@ -37,7 +32,7 @@
     </div>
   } @else {
     <div class="table-wrap">
-      <table>
+      <table data-testid="tabla-productos">
         <thead><tr>
           <th><button type="button" class="sort" (click)="ordenar('nombre')">Nombre <span>{{ ordenarPor() === 'nombre' ? (direccion() === 'asc' ? '↑' : '↓') : '↕' }}</span></button></th>
           <th>Categoría</th>
@@ -65,13 +60,14 @@
   }
 
   @if (resultado(); as r) {
-    <footer class="pagination">
-      <span>Página {{ r.pagina + 1 }} de {{ r.totalPaginas || 1 }} · {{ r.totalElementos }} productos</span>
-      <div>
-        <button type="button" class="page-button" [disabled]="r.pagina === 0 || cargando()" (click)="irA(r.pagina - 1)">← Anterior</button>
-        <button type="button" class="page-button" [disabled]="r.ultima || cargando()" (click)="irA(r.pagina + 1)">Siguiente →</button>
-      </div>
-    </footer>
+    <app-paginador
+      [pagina]="r.pagina"
+      [tamanio]="r.tamanio"
+      [totalPaginas]="r.totalPaginas"
+      [totalElementos]="r.totalElementos"
+      (paginaCambiada)="irA($event)"
+      (tamanioCambiado)="cambiarTamanio($event)"
+    />
   }
 </section>
 
