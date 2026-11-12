@@ -1,0 +1,7 @@
+.pagination { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; padding:14px 18px; border-top:1px solid #e3e8f0; color:#64748b; font-size:11px; }
+.page-size { display:flex; align-items:center; gap:8px; }
+select,.page-actions button { padding:8px 10px; border:1px solid #cbd5e1; border-radius:8px; background:#fff; color:#1f2937; font:inherit; }
+.page-actions { display:flex; gap:7px; }
+.page-actions button { cursor:pointer; }
+.page-actions button:disabled { color:#aeb7b1; cursor:not-allowed; }
+@media(max-width:600px) { .pagination { justify-content:flex-start; } .page-actions { width:100%; } .page-actions button { flex:1; } }

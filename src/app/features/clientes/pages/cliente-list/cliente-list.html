@@ -6,7 +6,6 @@
 <section class="panel">
   <div class="toolbar">
     <label class="search"><span aria-hidden="true">⌕</span><input class="input" type="search" placeholder="Buscar por DNI o nombre..." [value]="filtro()" (input)="filtro.set($any($event.target).value)"></label>
-    <label class="page-size">Filas <select class="select" [value]="tamanio()" (change)="cambiarTamanio($any($event.target).value)"><option value="5">5</option><option value="10">10</option><option value="20">20</option></select></label>
   </div>
   @if (cargando()) { <div class="state">Cargando clientes…</div> }
   @else if (filtrados().length === 0) { <div class="state"><strong>{{ filtro() ? 'No hay coincidencias en esta página' : 'Todavía no hay clientes' }}</strong><span>{{ filtro() ? 'Prueba con otro DNI o nombre.' : 'Registra un cliente para comenzar.' }}</span></div> }
@@ -21,6 +20,13 @@
       }
     </tbody></table></div>
   }
-  <footer class="pagination"><span>Página {{ pagina() + 1 }} de {{ totalPaginas() }} · {{ totalElementos() }} clientes</span><div><button type="button" class="page-button" [disabled]="pagina() === 0 || cargando()" (click)="anterior()">← Anterior</button><button type="button" class="page-button" [disabled]="ultima() || cargando()" (click)="siguiente()">Siguiente →</button></div></footer>
+  <app-paginador
+    [pagina]="pagina()"
+    [tamanio]="tamanio()"
+    [totalPaginas]="totalPaginas()"
+    [totalElementos]="totalElementos()"
+    (paginaCambiada)="irA($event)"
+    (tamanioCambiado)="cambiarTamanio($event)"
+  />
 </section>
 <p class="page-note">La búsqueda filtra los resultados de la página actual.</p>
