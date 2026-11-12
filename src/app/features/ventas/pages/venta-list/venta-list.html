@@ -2,12 +2,12 @@
   <header class="page-heading">
     <div><p class="eyebrow">OPERACIONES</p><h1>Consulta de ventas</h1></div>
     <div class="heading-actions no-imprimir">
-      <button class="button" type="button" [disabled]="!resultado()?.contenido?.length" (click)="imprimirConsulta()">🖨 Imprimir consulta</button>
+      <button class="button" type="button" [disabled]="!resultado()?.contenido?.length" (click)="imprimirConsulta()">Imprimir consulta</button>
       <a *appSiPermiso="'VENTAS_REGISTRAR'" class="button button-primary" routerLink="nueva">+ Nueva venta</a>
     </div>
   </header>
 
-  <p class="print-summary only-print">Filtros: {{ resumenFiltros() }} · Impreso el {{ ahora() | date:'dd/MM/yyyy HH:mm' }}</p>
+  <p class="print-summary only-print">Filtros: {{ resumenFiltros() }} · Impreso el {{ ahora() | date:'dd/MM/yyyy HH:mm' }} · Total registrado en la página (sin anuladas): {{ totalPagina() | currency:'PEN':'S/ ':'1.2-2' }}</p>
 
   <form class="filters no-imprimir" [formGroup]="filtros" (ngSubmit)="buscar()">
     <label>Cliente
@@ -31,11 +31,6 @@
       <button class="button" type="button" (click)="limpiar()">Limpiar</button>
       <button class="button button-primary" type="submit">Buscar</button>
     </div>
-    <label class="page-size">Filas
-      <select class="input" [value]="tamanio" (change)="cambiarTamanio($any($event.target).value)">
-        <option value="5">5</option><option value="10">10</option><option value="20">20</option>
-      </select>
-    </label>
   </form>
 
   @if (error()) { <div class="alert" role="alert">{{ error() }} <button type="button" (click)="buscar()">Reintentar</button></div> }
@@ -58,7 +53,7 @@
                 <td><span class="status" [class.cancelled]="venta.estado === 'ANULADA'">{{ venta.estado }}</span></td>
                 <td class="row-actions no-imprimir">
                   <a class="detail-link" [routerLink]="[venta.id]">Ver</a>
-                  <a class="detail-link" [routerLink]="[venta.id]" [queryParams]="{ imprimir: 1 }" title="Imprimir comprobante" aria-label="Imprimir comprobante">🖨</a>
+                  <a class="detail-link" [routerLink]="[venta.id]" [queryParams]="{ imprimir: 1 }" title="Imprimir comprobante" aria-label="Imprimir comprobante">Imprimir</a>
                 </td>
               </tr>
             } @empty {
@@ -67,14 +62,14 @@
           </tbody>
         </table>
       </div>
-      <footer class="pagination">
-        <span class="only-print">Total registrado en la página (sin anuladas): {{ totalPagina() | currency:'PEN':'S/ ':'1.2-2' }} · </span>
-        <span>Página {{ pagina.pagina + 1 }} de {{ pagina.totalPaginas || 1 }} · {{ pagina.totalElementos }} ventas</span>
-        <div class="no-imprimir">
-          <button class="button" type="button" [disabled]="pagina.pagina === 0" (click)="irA(pagina.pagina - 1)">← Anterior</button>
-          <button class="button" type="button" [disabled]="pagina.ultima" (click)="irA(pagina.pagina + 1)">Siguiente →</button>
-        </div>
-      </footer>
+      <app-paginador
+        [pagina]="pagina.pagina"
+        [tamanio]="pagina.tamanio"
+        [totalPaginas]="pagina.totalPaginas"
+        [totalElementos]="pagina.totalElementos"
+        (paginaCambiada)="irA($event)"
+        (tamanioCambiado)="cambiarTamanio($event)"
+      />
     }
   </section>
 </section>
